@@ -129,5 +129,19 @@ describe('tenders', ()=>{
         expect(getProductsResult[0]).to.have.property("bid");
       })
     })
+    describe('you can remove products with DEL /api/tenders/:id/products', ()=>{
+      var getProductsResult;
+      before((done)=>{
+        request.del('http://localhost:3000/api/tenders/'+newTender.id+'/products/'+products[1].id, {json:true}, (err, resp, body)=>{
+          request.get('http://localhost:3000/api/tenders/'+newTender.id+'/products', {json:true}, (err, resp, body)=>{
+            getProductsResult = body;
+            done();
+          })
+        })
+      })
+      it('will return full denormalized products list',()=>{
+        expect(getProductsResult.length).to.equal(0);
+      })
+    });
   })
 });

@@ -87,13 +87,13 @@ module.exports = {
             cb(null, tender.products);
           })
       },
-      removeProduct(id,cb){
+      removeProduct(id,pid, cb){
         var query = {id:id};
         var i = tenders.reduce(
           iwhere(query), null);
         tenders[i].products = tenders[i].products.reduce(
           function(res, prod){
-            if(prod.id !== +id) res.push(prod);
+            if(prod.id !== +pid) res.push(prod);
             return res;
           }, []);
         cb(null);

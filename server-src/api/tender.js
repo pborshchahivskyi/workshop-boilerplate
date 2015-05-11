@@ -50,7 +50,7 @@ function getParticipants(req,res,next){
 
 function removeParticipant(req,res,next){
 	var opt = req.user.id == 1?{}:{bid: req.user.business.id};
-	Tender.withOpt({}).removeProduct(req.params.id,  (err, result)=>{
+	Tender.withOpt({}).removeProduct(req.params.id, req.params.pid,  (err, result)=>{
 		if(err) return next(err);
 		res.json(result);
 	})
