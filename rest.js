@@ -1,3 +1,7 @@
+require('babel/register');
+process.env.APP = process.env.APP || 'dev';
+
+var path = require('path');
 var express = require('express')
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -12,6 +16,15 @@ var express = require('express')
   var LocalStrategy = require('passport-local').Strategy;
 
   var users = require('./server-src/db/users');
+
+
+  require.extensions['.scss'] = function(){
+  	return null;
+  }
+  require.extensions['.less'] = function(){
+  	return null;
+  }
+  var clientAppMiddleware = require("./src/main").middleware;
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -58,7 +71,17 @@ passport.use(new LocalStrategy(
 
 var app = express();
 
+if(process.env.APP !== 'test'){
+require('./dev-tools');
+// use webpack dev server for serving js files
+app.use('/js', function (req, res) {
+  res.redirect('http://localhost:3001/js' + req.path);
+});
+}
+
+
 // configure Express
+
 
 
 
@@ -82,9 +105,7 @@ var app = express();
   require('./server-src/api/product')(app);
   require('./server-src/api/tender')(app);
 
-app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
+
 
 app.get('/api/user', ensureAuthenticated, function(req, res){
 
@@ -141,14 +162,35 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.status(403).json({message: "not authenticated"})
 }
+
+app.use(function(){
+  clientAppMiddleware.apply(this, arguments);
+});
+
+
+var chokidar = require('chokidar');
+
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch(path.join(__dirname, 'src'), {ignored: /[\/\\]\./}).on('all', function(event, pat) {
+  Object.keys(require.cache).forEach(function(item){
+    if(item.indexOf(path.join(__dirname, 'src/')) == 0) {
+      delete require.cache[item]
+      }
+  })
+  //delete require.cache[path.join(__dirname, pat)];
+  delete require.cache[path.join(__dirname, 'src/main.js')];
+  clientAppMiddleware = require("./src/main").middleware;
+});
+
+
 var server;
 module.exports = {
-  start (){
+  start:function (){
     server = app.listen(3000, function() {
       console.log('Express server listening on port 3000');
     });
   },
-  end (cb){
+  end:function (cb){
     server.close(cb);
   }
 }
