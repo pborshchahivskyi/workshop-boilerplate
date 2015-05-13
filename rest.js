@@ -1,6 +1,13 @@
 require('babel/register');
 process.env.APP = process.env.APP || 'dev';
 
+/*if(process.env.APP == 'dev'){
+  process.on('uncaughtException', function(err) {
+    console.log('Caught exception: ' + err);
+  });
+}*/
+
+
 var path = require('path');
 var express = require('express')
   , passport = require('passport')

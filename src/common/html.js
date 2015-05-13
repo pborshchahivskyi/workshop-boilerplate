@@ -8,7 +8,6 @@ render: function() {
         <head>
           <title></title>
           <link rel="icon" type="image/png" href="/images/favicon.png" />
-          <link rel="stylesheet" type="text/css" href="/css/style.css" />
         </head>
         <body>
           <div dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
