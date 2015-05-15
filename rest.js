@@ -1,11 +1,12 @@
 require('babel/register');
 process.env.APP = process.env.APP || 'dev';
+process.env.HOSTNAME = process.env.HOSTNAME || 'http://localhost:3000';
 
-/*if(process.env.APP == 'dev'){
+if(process.env.APP == 'dev'){
   process.on('uncaughtException', function(err) {
     console.log('Caught exception: ' + err);
   });
-}*/
+}
 
 
 var path = require('path');

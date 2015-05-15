@@ -5,29 +5,21 @@ var {Route, DefaultRoute, Link} = Router;
 var RouteHandler = Router.RouteHandler;
 
 
-var app = grail.createApp({Layout: require("./common/html")});
+var app = grail.createApp({Layout: require("./common/html"), router:Router});
 require('./common/main.scss');
-//require('./config')(app);
-//var actions = require('./actions');
-//actions(app.actions)//add actions
+require('./config')(app);
 
-//var app = grail.createApp();
-//The routes
-// home
-// - active
-// - completed
-/*var routes = <Route path="/" name="home" handler={AppComp} stores={ItemsStore} ignoreScrollBehavior>
-    <Route name="active" path="active" handler = {ItemsComp} action={actions.getActive} />
-    <Route name="completed" path="completed" handler = {ItemsComp} action={actions.getCompleted}/>
-    <DefaultRoute handler = {ItemsComp} action={actions.getItems} />
-  </Route>*/
-  var LoginComp = require('./common/LoginComp'),
-      AppComp = require('./common/AppComp'),
-      HomeComp = require('./common/HomeComp')
+var AppComp = require('./common/AppComp'),
+    HomeComp = require('./common/HomeComp'),
+    MeStore = require('./common/MeStore');
 
-  var routes = (<Route path="/" name="home" handler={AppComp} ignoreScrollBehavior>
+
+
+
+  var routes = (<Route path="/" name="home" handler={AppComp}
+                    stores={MeStore} ignoreScrollBehavior>
       <DefaultRoute handler={HomeComp}/>
-      <Route path="login" name="login" handler={LoginComp}/>
+      {require('./pages/LoginPage')(app)}
     </Route>)
 
 app.useRoutes(routes);
