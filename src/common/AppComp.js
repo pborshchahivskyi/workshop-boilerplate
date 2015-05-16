@@ -33,6 +33,9 @@ var AppComp = React.createClass({
           <div className="navbar-header">
             <Link className="navbar-brand" to="home">TenderGov</Link>
           </div>
+          <ul className="nav navbar-nav">
+            <li><Link to="tenders">Tenders</Link></li>
+          </ul>
           <ul className="nav navbar-nav navbar-right">
             <li>{ProfileLink}</li>
           </ul>

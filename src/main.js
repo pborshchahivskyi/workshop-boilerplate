@@ -20,6 +20,7 @@ var AppComp = require('./common/AppComp'),
                     stores={MeStore} ignoreScrollBehavior>
       <DefaultRoute handler={HomeComp}/>
       {require('./pages/LoginPage')(app)}
+      {require('./pages/tenders/tendersPage')(app)}
     </Route>)
 
 app.useRoutes(routes);

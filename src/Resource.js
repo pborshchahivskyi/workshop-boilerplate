@@ -41,10 +41,10 @@ module.exports = function(agent){
         req.on('error', function(err){
           reject(err);
         })
-        req.end(function(res){
-          if(res.error) return reject(res.error);
+        req.end(function(err, res){
+          if(err) return reject(err.response.body);
           resolve(res.body);
-        });
+        })
 
         if(options && options.query){
           var query = options.query;
